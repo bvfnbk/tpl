@@ -18,6 +18,7 @@ interface IOService {
     fun createInputStreamReader(inputStream: FileInputStream, charset: Charset = Charsets.UTF_8): InputStreamReader
 
     // Writer
+    fun createOutputStreamWriter(outputStream: PrintStream, charset: Charset = Charsets.UTF_8): OutputStreamWriter
     fun createOutputStreamWriter(outputStream: FileOutputStream, charset: Charset = Charsets.UTF_8): OutputStreamWriter
     fun createOutputStreamWriter(target: File, charset: Charset = Charsets.UTF_8): OutputStreamWriter
 }

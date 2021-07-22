@@ -22,4 +22,7 @@ class DefaultIOService : IOService {
 
     override fun createOutputStreamWriter(target: File, charset: Charset): OutputStreamWriter =
         createOutputStreamWriter(createFileOutputStream(target), charset)
+
+    override fun createOutputStreamWriter(outputStream: PrintStream, charset: Charset): OutputStreamWriter =
+        OutputStreamWriter(outputStream, charset)
 }

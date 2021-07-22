@@ -38,24 +38,54 @@ object TemplrCommandSpek : Spek({
                 command.parse(args)
             }.isFailure()
         }
+    }
 
-        it("The output argument is required.") {
+    describe("The output can be directed to a file.") {
+        val expected = File("output")
+        val commonArguments = arrayOf("--model", "model.json", "--template", "template.ftl")
+        val expectedArguments = ApplicationArguments(
+            Charsets.UTF_8,
+            File("model.json"),
+            File("template.ftl"),
+            expected,
+            emptyMap()
+        )
+
+        it("Using short option") {
             // Given
-            val args = arrayOf("--model", "model.json", "--template", "template.ftl")
+            val args = commonArguments + arrayOf("-O", expected.name)
             val app = mockk<TemplrApplication>(relaxUnitFun = true)
             val command = TemplrCommand(app)
 
-            // When/Then
-            assertThat {
-                command.parse(args)
-            }.isFailure()
+            // When
+            command.parse(args)
+
+            // Then
+            verify {
+                app.run(expectedArguments)
+            }
+        }
+
+        it("Using long option") {
+            // Given
+            val args = commonArguments + arrayOf("--output", expected.name)
+            val app = mockk<TemplrApplication>(relaxUnitFun = true)
+            val command = TemplrCommand(app)
+
+            // When
+            command.parse(args)
+
+            // Then
+            verify {
+                app.run(expectedArguments)
+            }
         }
     }
 
     describe("The charset can be configured") {
         it("The default charset is used if nothing specified") {
             // Given
-            val args = arrayOf("--model", "model.json", "--template", "template.ftl", "output")
+            val args = arrayOf("--model", "model.json", "--template", "template.ftl")
             val app = mockk<TemplrApplication>(relaxUnitFun = true)
             val command = TemplrCommand(app)
 
@@ -69,21 +99,22 @@ object TemplrCommandSpek : Spek({
                         Charsets.UTF_8,
                         File("model.json"),
                         File("template.ftl"),
-                        File("output"),
+                        null,
                         emptyMap()
                     )
                 )
             }
         }
 
+
         describe("The specified charset is being used.") {
             val expected = Charsets.ISO_8859_1
-            val commonArguments = arrayOf("--model", "model.json", "--template", "template.ftl", "output")
+            val commonArguments = arrayOf("--model", "model.json", "--template", "template.ftl")
             val expectedArguments = ApplicationArguments(
                 Charsets.ISO_8859_1,
                 File("model.json"),
                 File("template.ftl"),
-                File("output"),
+                null,
                 emptyMap()
             )
 
@@ -122,7 +153,7 @@ object TemplrCommandSpek : Spek({
     describe("Properties are passed to the application") {
         it("An empty property map is passed if commandline does not contain a property") {
             // Given
-            val args = arrayOf("--model", "model.json", "--template", "template.ftl", "output")
+            val args = arrayOf("--model", "model.json", "--template", "template.ftl")
             val app = mockk<TemplrApplication>(relaxUnitFun = true)
             val command = TemplrCommand(app)
 
@@ -136,7 +167,7 @@ object TemplrCommandSpek : Spek({
                         Charsets.UTF_8,
                         File("model.json"),
                         File("template.ftl"),
-                        File("output"),
+                        null,
                         emptyMap()
                     )
                 )
@@ -153,7 +184,6 @@ object TemplrCommandSpek : Spek({
                 "-Dkey=value",
                 "-D",
                 "other=value",
-                "output"
             )
             val app = mockk<TemplrApplication>(relaxUnitFun = true)
             val command = TemplrCommand(app)
@@ -168,7 +198,7 @@ object TemplrCommandSpek : Spek({
                         Charsets.UTF_8,
                         File("model.json"),
                         File("template.ftl"),
-                        File("output"),
+                        null,
                         mapOf(
                             "key" to "value",
                             "other" to "value"

@@ -9,12 +9,15 @@ import com.github.ajalt.clikt.parameters.options.*
 import com.github.ajalt.clikt.parameters.types.file
 import com.github.bvfnbk.templr.api.TemplrApplication
 import com.github.bvfnbk.templr.api.model.ApplicationArguments
+import java.io.File
 import java.nio.charset.Charset
 
 /**
  * @author bvfnbk
  */
-class TemplrCommand(private val application: TemplrApplication) : CliktCommand(help = "Runs the templr application.") {
+class TemplrCommand(private val application: TemplrApplication) : CliktCommand(
+    help = "Runs the templr application. Writes the result to stdout by default."
+) {
     init {
         context { helpFormatter = CliktHelpFormatter(showDefaultValues = true) }
     }
@@ -22,7 +25,7 @@ class TemplrCommand(private val application: TemplrApplication) : CliktCommand(h
     private val properties: Map<String, String> by option(
         "-D",
         help = "A key/value pair to be passed to the application.",
-        metavar="KEY=VALUE"
+        metavar = "KEY=VALUE"
     ).associate()
 
     private val charset by option(
@@ -43,7 +46,8 @@ class TemplrCommand(private val application: TemplrApplication) : CliktCommand(h
         .file()
         .required()
 
-    private val output by argument().file()
+    private val output: File? by option("-O", "--output", help = "The path to the file to write the result to.")
+        .file()
 
     override fun run() {
         application.run(

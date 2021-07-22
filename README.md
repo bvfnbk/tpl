@@ -10,14 +10,15 @@ template engine and was a result of a quick _Kotlin_ script hack.
 ## Usage
 
 ```bash
-Usage: templr [OPTIONS] OUTPUT
+Usage: templr [OPTIONS]
 
-  Runs the templr application.
+  Runs the templr application. Writes the result to stdout by default.
 
 Options:
   -D KEY=VALUE           A key/value pair to be passed to the application.
   -c, --charset CHARSET  The input/output charset to be used. (default: UTF-8)
   -m, --model PATH       The path to the JSON model.
+  -O, --output PATH      The path to an output file.
   -t, --template PATH    The path to the freemarker template.
   -h, --help             Show this message and exit
 ```

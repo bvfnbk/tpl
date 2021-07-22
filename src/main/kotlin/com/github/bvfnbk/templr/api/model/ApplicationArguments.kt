@@ -12,6 +12,9 @@ data class ApplicationArguments(
     val charset: Charset,
     val model: File,
     val template: File,
-    val output: File,
+    val output: File?,
     val properties: Map<String, String>
-)
+) {
+    val writeToStdOut = output == null
+    val writeToFile = output != null
+}

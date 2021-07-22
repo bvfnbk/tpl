@@ -5,6 +5,8 @@ import com.github.bvfnbk.templr.api.model.ApplicationArguments
 import com.github.bvfnbk.templr.api.service.IOService
 import com.github.bvfnbk.templr.api.service.ModelService
 import com.github.bvfnbk.templr.api.service.TemplateService
+import java.io.OutputStreamWriter
+import java.io.Writer
 
 /**
  * @author bvfnbk
@@ -23,7 +25,13 @@ class DefaultTemplrApplication(
         val context = modelService.load(arguments.model, arguments.charset)
 
         // Create writer:
-        val writer = ioService.createOutputStreamWriter(arguments.output, arguments.charset)
+        val writer = when {
+            arguments.writeToFile -> ioService.createOutputStreamWriter(
+                arguments.output!!,
+                arguments.charset
+            )
+            else -> ioService.createOutputStreamWriter(System.out, arguments.charset)
+        }
 
         writer.use {
             // Apply template:

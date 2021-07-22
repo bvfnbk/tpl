@@ -1,6 +1,5 @@
 # `templr`
 
-[![Build Status](https://travis-ci.com/bvfnbk/templr.svg?branch=main)](https://travis-ci.com/bvfnbk/templr)
 [![CodeFactor](https://www.codefactor.io/repository/github/bvfnbk/templr/badge)](https://www.codefactor.io/repository/github/bvfnbk/templr)
 
 ---
